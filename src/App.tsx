@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import './app.scss'
+import { useCallbackRef } from './packages/hook/useCallbackRefs'
 
 export default () => {
     const [pos,setPos] = useState({
@@ -16,7 +17,7 @@ export default () => {
             startY: 0             // 拖拽开始时鼠标的Y值
         })
 
-        const mouseDown = ((e:React.MouseEvent<HTMLDivElement>)=>{
+        const mouseDown = useCallbackRef((e:React.MouseEvent<HTMLDivElement>)=>{
             document.addEventListener('mousemove',mouseMove),
             document.addEventListener('mouseup',mouseUp),
             dragData.current = {
@@ -26,7 +27,7 @@ export default () => {
                 startY: e.clientY
             }
         })
-        const mouseMove = ((e:MouseEvent)=>{
+        const mouseMove = useCallbackRef((e:MouseEvent)=>{  // move函数一直不变，但是执行的是传入的最新的传入函数
             const {startX,startY,startLeft,startTop} = dragData.current
             const durX = e.clientX
             const durY = e.clientY
@@ -34,8 +35,10 @@ export default () => {
                 top: startTop + durY,
                 left: startLeft + durX
             })
+            console.log(pos);
+            
         })
-        const mouseUp = (()=>{
+        const mouseUp = useCallbackRef(()=>{
             document.removeEventListener('mousemove',mouseMove)
             document.removeEventListener('mouseup',mouseUp)
         })
