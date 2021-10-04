@@ -1,0 +1,57 @@
+$headSize: 60px;
+$menuSize: 275px;
+$operatorSize: 275px;
+
+$ibc: #dcdfe6;
+$ib1: #ebeef5;
+$itc: #314659;
+$icc: rgba(0,0,0,0.45);
+$boxShadowColor: #f0f1f2;
+$primary: #409EFF;
+
+.react-visual-editor{
+    position: fixed;
+    top:  20px;
+    left: 20px;
+    bottom: 20px;
+    right: 20px;
+    background-color: #fff;
+
+    .react-visual-editor-head{
+        position: absolute;
+        top: 0;
+        left: $menuSize;
+        right: $operatorSize;
+        height: $headSize;
+        background-color: #f6f6f6;
+            z-index: 1;
+        }
+    .react-visual-editor-menu{
+        position: absolute;
+        top:  0;
+        left: 0;
+        bottom: 0;
+        width: $menuSize;
+        background-color: white;
+        border-left: 1px solid $ibc;
+    }
+    .react-visual-editor-operator{
+        position: absolute;
+        top:  0;
+        right: 0;
+        bottom: 0;
+        width: $operatorSize;
+        background-color: white;
+    }
+    .react-visual-editor-body{
+        position: absolute;
+        top:  0;
+        left: $menuSize;
+        right: $operatorSize;
+        bottom: 0;
+        padding-top: $headSize;
+        box-sizing: border-box;
+        background-color: #f6f6f6;
+    }
+    
+}
