@@ -5,10 +5,11 @@ import { ReactVisualEditorConfig, ReactVisualEditorValue } from './ReactVisualEd
 export const ReactVisualEditor: React.FC<{
     value: ReactVisualEditorValue,
     onChange: (val: ReactVisualEditorValue) => void,
-    config: ReactVisualEditorConfig 
+    config: ReactVisualEditorConfig
 }> = (props) => {
     console.log(props);
-    return (
+    // @ts-ignore
+  return (
         <div className="react-visual-editor">
             <div className="react-visual-editor-menu">
                 {props.config.componentArray.map((component, index) => {
@@ -20,7 +21,7 @@ export const ReactVisualEditor: React.FC<{
                             </div>
                         </div>
                     )
-                    
+
                 })}
             </div>
             <div className="react-visual-editor-head">head</div>
