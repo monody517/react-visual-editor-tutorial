@@ -12,9 +12,10 @@ export const ReactVisualEditorBlocks: React.FC<{
   const style = useMemo(() => { // 可拖拽组件的样式，由App的editorValue中的block确定，主要确定位置
     return {
       top: `${props.block.top}px`,
-      left: `${props.block.left}px`
+      left: `${props.block.left}px`,
+      opacity: props.block.adjustPostion ? '0' : '',
     }
-  }, [props.block.top, props.block.left])
+  }, [props.block.top, props.block.left, props.block.adjustPostion])
 
   const eleRef = useRef({} as HTMLDivElement)
   const {froceUpdate} = useUpdate()
