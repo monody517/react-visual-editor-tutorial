@@ -16,6 +16,7 @@ $primary: #409EFF;
     bottom: 20px;
     right: 20px;
     background-color: #fff;
+    overflow: hidden;
 
     .react-visual-editor-head{
         position: absolute;
@@ -86,6 +87,29 @@ $primary: #409EFF;
         padding-top: $headSize;
         box-sizing: border-box;
         background-color: #f6f6f6;
+        overflow: auto;
+        display: flex;
+        justify-content: center;
+        .react-visual-editor-container{
+            background-color: white;
+            .react-visual-editor-block{
+                &:after{
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0
+                }
+            }
+        }
     }
-    
 }
+
+.react-visual-editor-container{
+    position: relative;
+    .react-visual-editor-block{
+        position: absolute;
+    }
+}
+
