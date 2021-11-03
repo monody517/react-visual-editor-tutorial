@@ -65,7 +65,8 @@ export const ReactVisualEditor: React.FC<{
               creatVisualBlock({
                 top: e.offsetY,
                 left: e.offsetX,
-                component: dragData.current.dragComponent!
+                component: dragData.current.dragComponent!,
+                adjustPostion: true
               })
             ]
           })
