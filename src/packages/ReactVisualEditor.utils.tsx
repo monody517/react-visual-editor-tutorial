@@ -6,6 +6,7 @@ export interface ReactVisualEditorBlock {
   top: number,    // component对象的top值
   left: number,   // component对象的left值
   adjustPostion: boolean  // 拖拽完成时元素右上角会自动调整到鼠标位置，需要一个标识开启关闭这个特性
+  focus: boolean  // 判断当前是否被选中
 }
 
 /**
@@ -16,19 +17,22 @@ export function creatVisualBlock(
     top,
     left,
     component,
-    adjustPostion
+    adjustPostion,
+    focus
   }: {
     top: number,
     left: number,
     component: ReactVisualEditorComponent,
-    adjustPostion: boolean
+    adjustPostion: boolean,
+    focus: boolean
   }
 ): ReactVisualEditorBlock {
   return {
     componentKey: component.key,
     top,
     left,
-    adjustPostion
+    adjustPostion: false,
+    focus: false
   }
 }
 

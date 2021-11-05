@@ -102,6 +102,18 @@ $primary: #409EFF;
                     bottom: 0
                 }
             }
+            .react-visual-editor-focus{
+                &:before{
+                    content: '';
+                    position: absolute;
+                    $size: 2px;
+                    top: -$size;
+                    left: -$size;
+                    right: -$size;
+                    bottom: -$size;
+                    border: 1px blue dashed;
+                }
+            }
         }
     }
 }

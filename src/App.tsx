@@ -54,7 +54,15 @@ export default () => {
         width: 1000,
         height: 500
       },
-      blocks: [],
+      blocks: [
+        {
+          componentKey: 'input',
+          top: 100,
+          left: 100,
+          adjustPostion: true,
+          focus: true
+        }
+      ],
     }
     return val
   })

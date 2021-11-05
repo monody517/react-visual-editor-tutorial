@@ -3,10 +3,12 @@
 import {ReactVisualEditorBlock, ReactVisualEditorConfig} from "./ReactVisualEditor.utils";
 import {useEffect, useMemo, useRef} from "react";
 import {useUpdate} from "./hook/useUpdate";
+import classNames from "classnames";
 
 export const ReactVisualEditorBlocks: React.FC<{
   block: ReactVisualEditorBlock,
-  config: ReactVisualEditorConfig
+  config: ReactVisualEditorConfig,
+  onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void,
 }> = (props) => {
 
   const style = useMemo(() => { // 可拖拽组件的样式，由App的editorValue中的block确定，主要确定位置
@@ -17,8 +19,16 @@ export const ReactVisualEditorBlocks: React.FC<{
     }
   }, [props.block.top, props.block.left, props.block.adjustPostion])
 
+  const classes = useMemo(() => classNames([
+    'react-visual-editor-block',
+    {
+      'react-visual-editor-focus': props.block.focus
+    }
+  ]), [props.block.focus])
+
   const eleRef = useRef({} as HTMLDivElement)
   const {froceUpdate} = useUpdate()
+
 
   useEffect(() => {  // block的adjustPostion为true时调整block的位置居中
     if (props.block.adjustPostion) {
@@ -38,7 +48,7 @@ export const ReactVisualEditorBlocks: React.FC<{
   }
 
   return (
-    <div className="react-visual-editor-block" style={style} ref={eleRef}>
+    <div className={classes} style={style} ref={eleRef} onMouseDown={props.onMouseDown}>
       {render}
     </div>
   )
