@@ -31,7 +31,7 @@ export function creatVisualBlock(
     componentKey: component.key,
     top,
     left,
-    adjustPostion: false,
+    adjustPostion: true,
     focus: false
   }
 }

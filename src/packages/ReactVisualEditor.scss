@@ -103,6 +103,7 @@ $primary: #409EFF;
                 }
             }
             .react-visual-editor-focus{
+                user-select: none;
                 &:before{
                     content: '';
                     position: absolute;

@@ -9,6 +9,7 @@ import {
 import {useMemo, useRef} from "react";
 import {ReactVisualEditorBlocks} from "./ReactVisualEditorBlocks";
 import {useCallbackRef} from "./hook/useCallbackRefs";
+import {Simulate} from "react-dom/test-utils";
 
 
 export const ReactVisualEditor: React.FC<{
@@ -116,11 +117,12 @@ export const ReactVisualEditor: React.FC<{
       } else {
         // 如果点击的block没有被选中，才清空其他的block，否则不做任何事情，防止拖拽多个block时去掉其他的focus
         if (!block.focus) {
-          console.log('block',block)
+          console.log('block', block)
           block.focus = true
           methods.clearFocus(block)
         }
       }
+      setTimeout(()=>{blockDraggier.mousedown(e)})
     })
     const mousedownContainer = ((e: React.MouseEvent<HTMLDivElement>) => {
       if (e.target !== e.currentTarget) {
@@ -134,6 +136,47 @@ export const ReactVisualEditor: React.FC<{
       block: mousedownBlock,
       container: mousedownContainer
     }
+  })()
+
+  // block元素在container中的拖拽事件
+  const blockDraggier = (() => {
+    const dragData = useRef({
+      startX: 0,  // 拖拽开始时鼠标的left值
+      startY: 0,  // 拖拽开始时鼠标的top值
+      startPosArray: [] as { top: number, left: number }[]   // 拖拽开始时所有选中的block元素的left值和top值
+    })
+    const mousedown = useCallbackRef((e: React.MouseEvent<HTMLDivElement>) => {
+      // @ts-ignore
+      document.addEventListener('mousemove', mousemove)
+      // @ts-ignore
+      document.addEventListener('mouseup', mouseup)
+      console.log('mousedown', focusData.focus)
+      dragData.current = {
+        startX: e.clientX,
+        startY: e.clientY,
+        startPosArray: focusData.focus.map(({top, left}) => ({top, left}))
+      }
+      console.log('dragData', dragData)
+    })
+    const mousemove = useCallbackRef((e: React.MouseEvent) => {
+      const {startX, startY,startPosArray} = dragData.current
+      const {clientY: moveY, clientX: moveX} = e
+      const durX = moveX - startX
+      const durY = moveY - startY
+      focusData.focus.forEach((block, index) => {
+        const {left, top} = startPosArray[index]
+        block.top = top + durY
+        block.left = left + durX
+      })
+      methods.updateBlocks(props.value.blocks)
+    })
+    const mouseup = useCallbackRef((e: React.MouseEvent) => {
+      // @ts-ignore
+      document.removeEventListener('mousemove', mousemove)
+      // @ts-ignore
+      document.removeEventListener('mouseup', mouseup)
+    })
+    return {mousedown}
   })()
 
   return (

@@ -52,17 +52,9 @@ export default () => {
     const val: ReactVisualEditorValue = {
       container: {
         width: 1000,
-        height: 500
+        height: 700
       },
-      blocks: [
-        {
-          componentKey: 'input',
-          top: 100,
-          left: 100,
-          adjustPostion: true,
-          focus: true
-        }
-      ],
+      blocks: [],
     }
     return val
   })
