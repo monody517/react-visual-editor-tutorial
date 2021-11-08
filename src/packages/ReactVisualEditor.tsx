@@ -37,7 +37,6 @@ export const ReactVisualEditor: React.FC<{
     props.value.blocks.forEach((block) => {
       (block.focus ? focus : unfocus).push(block)
     })
-    console.log('{focus, unfocus}',{focus, unfocus})
     return {focus, unfocus}
   }, [props.value.blocks])
 
@@ -49,10 +48,8 @@ export const ReactVisualEditor: React.FC<{
     },
     // 清空选中的元素
     clearFocus: (external?: ReactVisualEditorBlock) => {
-      (!!external ? focusData.focus.filter(item => item !== external) : focusData.focus).forEach(block => block.focus)
+      (!!external ? focusData.focus.filter(item => item !== external) : focusData.focus).forEach(block => block.focus = false)
       {
-        console.log('focusData.focus',focusData.focus)
-        console.log('props.value.blocks',props.value.blocks);
         methods.updateBlocks(props.value.blocks)
       }
     }
