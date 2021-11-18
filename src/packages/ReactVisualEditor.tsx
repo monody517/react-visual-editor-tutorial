@@ -6,10 +6,10 @@ import {
   ReactVisualEditorConfig,
   ReactVisualEditorValue
 } from './ReactVisualEditor.utils'
-import {useMemo, useRef} from "react";
+import {useMemo, useRef, useState} from "react";
 import {ReactVisualEditorBlocks} from "./ReactVisualEditorBlocks";
 import {useCallbackRef} from "./hook/useCallbackRefs";
-import {Simulate} from "react-dom/test-utils";
+import {preview} from "vite";
 
 
 export const ReactVisualEditor: React.FC<{
@@ -17,6 +17,9 @@ export const ReactVisualEditor: React.FC<{
   onChange: (val: ReactVisualEditorValue) => void,
   config: ReactVisualEditorConfig  // 组件数据类型，包括Map，Array，以及注册一个组件的方法
 }> = (props) => {
+
+  const [preview,setPreview] = useState(false)  // 当前是否处于预览状态
+  const [edit,setEditing] = useState(false)  // 当前是否处于编辑状态
 
   const containerRef = useRef({} as HTMLDivElement)
 
@@ -55,6 +58,12 @@ export const ReactVisualEditor: React.FC<{
       }
     }
   }
+
+  const commander = (
+    () => {
+
+    }
+  )
 
   const menuDraggier = ( // 拖拽事件
     () => {
@@ -117,12 +126,13 @@ export const ReactVisualEditor: React.FC<{
       } else {
         // 如果点击的block没有被选中，才清空其他的block，否则不做任何事情，防止拖拽多个block时去掉其他的focus
         if (!block.focus) {
-          console.log('block', block)
           block.focus = true
           methods.clearFocus(block)
         }
       }
-      setTimeout(()=>{blockDraggier.mousedown(e)})
+      setTimeout(() => {
+        blockDraggier.mousedown(e)
+      })
     })
     const mousedownContainer = ((e: React.MouseEvent<HTMLDivElement>) => {
       if (e.target !== e.currentTarget) {
@@ -150,16 +160,15 @@ export const ReactVisualEditor: React.FC<{
       document.addEventListener('mousemove', mousemove)
       // @ts-ignore
       document.addEventListener('mouseup', mouseup)
-      console.log('mousedown', focusData.focus)
       dragData.current = {
         startX: e.clientX,
         startY: e.clientY,
         startPosArray: focusData.focus.map(({top, left}) => ({top, left}))
       }
-      console.log('dragData', dragData)
     })
+
     const mousemove = useCallbackRef((e: React.MouseEvent) => {
-      const {startX, startY,startPosArray} = dragData.current
+      const {startX, startY, startPosArray} = dragData.current
       const {clientY: moveY, clientX: moveX} = e
       const durX = moveX - startX
       const durY = moveY - startY
@@ -179,11 +188,72 @@ export const ReactVisualEditor: React.FC<{
     return {mousedown}
   })()
 
+  // container的命令队列
+  const button: {
+    label: string | (() => string),
+    icon: string | (() => string),
+    tip?: string | (() => string),
+    handler: () => void
+  }[] = [
+    {
+      label: '撤销', icon: 'icon-back', tip: 'ctrl+z', handler: (() => {
+        // commander.unredo()
+      })
+    },
+    {
+      label: '重做', icon: 'icon-forward', tip: 'ctrl+y, ctrl+shift+z', handler: (() => {
+        // commander.redo()
+      })
+    },
+    {
+      label: ()=>preview ? '编辑':'预览',
+      icon: ()=>preview ? 'icon-forward':'icon-browse',
+      tip: 'ctrl+y, ctrl+shift+z',
+      handler: (() => {
+        if(!preview){
+          methods.clearFocus()
+        }else {
+          setPreview(!preview)
+        }
+      })
+    },
+    {
+      label: '导出', icon: 'icon-export', handler: (() => {
+        // commander.export()
+      })
+    },
+    {
+      label: '置顶', icon: 'icon-place-top', tip: 'ctrl+up', handler: (() => {
+        // commander.placeTop()
+      })
+    },
+    {
+      label: '置底', icon: 'icon-place-bottom', tip: 'ctrl+down', handler: (() => {
+        // commander.placeBottom()
+      })
+    },
+    {
+      label: '删除', icon: 'icon-delete', tip: 'ctrl+d, delete, backspace', handler: (() => {
+        // commander.delete()
+      })
+    },
+    {
+      label: '清空', icon: 'icon-reset', handler: (() => {
+        // commander.clear()
+      })
+    },
+    {
+      label: '关闭', icon: 'icon-close', handler: (() => {
+        methods.clearFocus()
+        setEditing(false)
+      })
+    },
+  ]
+
   return (
     <div className="react-visual-editor">
       <div className="react-visual-editor-menu">
         {props.config.componentArray.map((component, index) => {
-
           return (
             <div className="react-visual-editor-menu-item"
                  key={index}
@@ -199,7 +269,22 @@ export const ReactVisualEditor: React.FC<{
           )
         })}
       </div>
-      <div className="react-visual-editor-head">head</div>
+      <div className="react-visual-editor-head">
+        {
+          button.map((btn,index)=>{
+            const label = typeof btn.label === 'function' ? btn.label() : btn.label
+            const icon = typeof btn.icon === 'function' ? btn.icon() : btn.icon
+            const tip = btn.tip ? btn.tip : ''
+            const handler = btn.handler
+            return(
+              <div className="react-visual-editor-head-btn">
+                <i className={`iconfont ${icon}`} />
+                <span>{label}</span>
+              </div>
+            )
+          })
+        }
+      </div>
       <div className="react-visual-editor-operator">operator</div>
       <div className="react-visual-editor-body">
         <div className="react-visual-editor-container"

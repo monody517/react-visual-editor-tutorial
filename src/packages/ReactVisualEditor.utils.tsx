@@ -5,8 +5,10 @@ export interface ReactVisualEditorBlock {
   componentKey: string,   // component对象中的key，通过这个来找到visual config中的component
   top: number,    // component对象的top值
   left: number,   // component对象的left值
-  adjustPostion: boolean  // 拖拽完成时元素右上角会自动调整到鼠标位置，需要一个标识开启关闭这个特性
-  focus: boolean  // 判断当前是否被选中
+  // 拖拽完成时元素右上角会自动调整到鼠标位置，需要一个标识开启关闭这个特性
+  adjustPostion: boolean,
+  // 判断当前是否被选中
+  focus: boolean
 }
 
 /**

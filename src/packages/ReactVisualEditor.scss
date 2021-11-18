@@ -5,124 +5,154 @@ $operatorSize: 275px;
 $ibc: #dcdfe6;
 $ib1: #ebeef5;
 $itc: #314659;
-$icc: rgba(0,0,0,0.45);
+$icc: rgba(0, 0, 0, 0.45);
 $boxShadowColor: #f0f1f2;
 $primary: #409EFF;
 
-.react-visual-editor{
-    position: fixed;
-    top:  20px;
-    left: 20px;
-    bottom: 20px;
-    right: 20px;
-    background-color: #fff;
-    overflow: hidden;
+.react-visual-editor {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  bottom: 20px;
+  right: 20px;
+  background-color: #fff;
+  overflow: hidden;
 
-    .react-visual-editor-head{
+  .react-visual-editor-head {
+    position: absolute;
+    top: 0;
+    left: $menuSize;
+    right: $operatorSize;
+    height: $headSize;
+    background-color: #f6f6f6;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    .react-visual-editor-head-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      background-color: rgba(black, 0.3);
+      color: white;
+      border-left: 1px rgba(white,0.5) solid;
+      transition: background-color linear .5s;
+      cursor: pointer;
+      &:hover{
+        background-color: white;
+        color: $primary
+      }
+    }
+  }
+
+  .react-visual-editor-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: $menuSize;
+    background-color: white;
+    border-left: 1px solid $ibc;
+    padding: 20px;
+    box-sizing: border-box;
+
+    .react-visual-editor-menu-item {
+      border: 1px solid $ibc;
+      margin-top: 20px;
+      position: relative;
+      padding: 40px 16px 20px 16px;
+      text-align: center;
+
+      &:after {
         position: absolute;
         top: 0;
-        left: $menuSize;
-        right: $operatorSize;
-        height: $headSize;
-        background-color: #f6f6f6;
-            z-index: 1;
-        }
-    .react-visual-editor-menu{
-        position: absolute;
-        top:  0;
         left: 0;
-        bottom: 0;
-        width: $menuSize;
-        background-color: white;
-        border-left: 1px solid $ibc;
-        padding: 20px;
-        box-sizing: border-box;
-        .react-visual-editor-menu-item{
-            border: 1px solid $ibc;
-            margin-top: 20px;
-            position: relative;
-            padding: 40px 16px 20px 16px;
-            text-align: center;
-
-            &:after{
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                content: '';
-            }
-
-            &:hover{
-                border-color: $primary;
-                cursor: move;
-            }
-
-            .react-visual-editor-menu-item-name{
-                position: absolute;
-                top: 0;
-                left: 0;
-                background-color: $primary;
-                color: white;
-                font-size: 12px;
-                line-height: 2em;
-                padding: 0 20px;
-            }
-        }
-    }
-    .react-visual-editor-operator{
-        position: absolute;
-        top:  0;
         right: 0;
         bottom: 0;
-        width: $operatorSize;
-        background-color: white;
-    }
-    .react-visual-editor-body{
+        content: '';
+      }
+
+      &:hover {
+        border-color: $primary;
+        cursor: move;
+      }
+
+      .react-visual-editor-menu-item-name {
         position: absolute;
-        top:  0;
-        left: $menuSize;
-        right: $operatorSize;
-        bottom: 0;
-        padding-top: $headSize;
-        box-sizing: border-box;
-        background-color: #f6f6f6;
-        overflow: auto;
-        display: flex;
-        justify-content: center;
-        .react-visual-editor-container{
-            background-color: white;
-            .react-visual-editor-block{
-                &:after{
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0
-                }
-            }
-            .react-visual-editor-focus{
-                user-select: none;
-                &:before{
-                    content: '';
-                    position: absolute;
-                    $size: 2px;
-                    top: -$size;
-                    left: -$size;
-                    right: -$size;
-                    bottom: -$size;
-                    border: 1px blue dashed;
-                }
-            }
-        }
+        top: 0;
+        left: 0;
+        background-color: $primary;
+        color: white;
+        font-size: 12px;
+        line-height: 2em;
+        padding: 0 20px;
+      }
     }
+  }
+
+  .react-visual-editor-operator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: $operatorSize;
+    background-color: white;
+  }
+
+  .react-visual-editor-body {
+    position: absolute;
+    top: 0;
+    left: $menuSize;
+    right: $operatorSize;
+    bottom: 0;
+    padding-top: $headSize;
+    box-sizing: border-box;
+    background-color: #f6f6f6;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+
+    .react-visual-editor-container {
+      background-color: white;
+
+      .react-visual-editor-block {
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0
+        }
+      }
+
+      .react-visual-editor-focus {
+        user-select: none;
+
+        &:before {
+          content: '';
+          position: absolute;
+          $size: 2px;
+          top: -$size;
+          left: -$size;
+          right: -$size;
+          bottom: -$size;
+          border: 1px blue dashed;
+        }
+      }
+    }
+  }
 }
 
-.react-visual-editor-container{
-    position: relative;
-    .react-visual-editor-block{
-        position: absolute;
-    }
+.react-visual-editor-container {
+  position: relative;
+
+  .react-visual-editor-block {
+    position: absolute;
+  }
 }
 
