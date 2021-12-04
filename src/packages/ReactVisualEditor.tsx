@@ -9,7 +9,6 @@ import {
 import {useMemo, useRef, useState} from "react";
 import {ReactVisualEditorBlocks} from "./ReactVisualEditorBlocks";
 import {useCallbackRef} from "./hook/useCallbackRefs";
-import {preview} from "vite";
 
 
 export const ReactVisualEditor: React.FC<{
