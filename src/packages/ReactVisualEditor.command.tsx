@@ -1,6 +1,8 @@
 import deepcopy from "deepcopy";
 import { useCommander } from "./plugin/command.plugin";
 import { ReactVisualEditorBlock, ReactVisualEditorValue } from "./ReactVisualEditor.utils";
+import {useState} from "react";
+import {KeyboardCode} from "./plugin/keyboard-code";
 
 export function useVisualCommand(
     { focusData, value, updateBlock }:
@@ -15,6 +17,7 @@ export function useVisualCommand(
 ) {
     const commander = useCommander()
 
+    /* 删除命令 */
     commander.useRegistry({
         name: 'delete',
         keyboard: [
@@ -22,7 +25,7 @@ export function useVisualCommand(
             'ctrl+d',
             'backspace',
         ],
-        execute() { 
+        execute() {
 
             const before = deepcopy(value.blocks)
             const after = deepcopy(focusData.unFocus)

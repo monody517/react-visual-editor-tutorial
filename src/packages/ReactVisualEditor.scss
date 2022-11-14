@@ -66,6 +66,7 @@ $primary: #409EFF;
       position: relative;
       padding: 40px 16px 20px 16px;
       text-align: center;
+      user-select: none;
 
       &:after {
         position: absolute;
@@ -79,6 +80,10 @@ $primary: #409EFF;
       &:hover {
         border-color: $primary;
         cursor: move;
+      }
+
+      &:active{
+        background-color: mix($primary,white,20%);
       }
 
       .react-visual-editor-menu-item-name {
