@@ -9,6 +9,7 @@ import {
 import {useMemo, useRef, useState} from "react";
 import {ReactVisualEditorBlocks} from "./ReactVisualEditorBlocks";
 import {useCallbackRef} from "./hook/useCallbackRefs";
+import {useVisualCommand} from "./ReactVisualEditor.command";
 
 
 export const ReactVisualEditor: React.FC<{
@@ -36,11 +37,11 @@ export const ReactVisualEditor: React.FC<{
   // 计算当前的blocks中有哪些block是选中的，哪些是未选中的
   const focusData = useMemo(() => {
     const focus: ReactVisualEditorBlock[] = []
-    const unfocus: ReactVisualEditorBlock[] = []
+    const unFocus: ReactVisualEditorBlock[] = []
     props.value.blocks.forEach((block) => {
-      (block.focus ? focus : unfocus).push(block)
+      (block.focus ? focus : unFocus).push(block)
     })
-    return {focus, unfocus}
+    return {focus, unFocus}
   }, [props.value.blocks])
 
   // 对外暴露的方法
@@ -57,12 +58,6 @@ export const ReactVisualEditor: React.FC<{
       }
     }
   }
-
-  const commander = (
-    () => {
-
-    }
-  )
 
   const menuDraggier = ( // 拖拽事件
     () => {
@@ -187,6 +182,13 @@ export const ReactVisualEditor: React.FC<{
     return {mousedown}
   })()
 
+  // 命令管理对象
+  const commander = useVisualCommand({
+    focusData,
+    value:props.value,
+    updateBlock: methods.updateBlocks
+  })
+
   // container的命令队列
   const button: {
     label: string | (() => string),
@@ -196,12 +198,12 @@ export const ReactVisualEditor: React.FC<{
   }[] = [
     {
       label: '撤销', icon: 'icon-back', tip: 'ctrl+z', handler: (() => {
-        // commander.unredo()
+        commander.undo()
       })
     },
     {
       label: '重做', icon: 'icon-forward', tip: 'ctrl+y, ctrl+shift+z', handler: (() => {
-        // commander.redo()
+        commander.redo()
       })
     },
     {
@@ -233,7 +235,7 @@ export const ReactVisualEditor: React.FC<{
     },
     {
       label: '删除', icon: 'icon-delete', tip: 'ctrl+d, delete, backspace', handler: (() => {
-        // commander.delete()
+        commander.delete()
       })
     },
     {
@@ -276,7 +278,7 @@ export const ReactVisualEditor: React.FC<{
             const tip = btn.tip ? btn.tip : ''
             const handler = btn.handler
             return(
-              <div className="react-visual-editor-head-btn">
+              <div className="react-visual-editor-head-btn"onClick={btn.handler}>
                 <i className={`iconfont ${icon}`} />
                 <span>{label}</span>
               </div>

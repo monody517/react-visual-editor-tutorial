@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {KeyboardCode} from "./keyboard-code";
 
 export interface CommandExecute {
@@ -99,7 +99,7 @@ export function useCommander() {
     /* 注册撤回命令(撤回命令不需要进入命令队列) */
     useRegistry({
         name: 'undo',
-        keyboard: 'crtl+z',
+        keyboard: 'ctrl+z',
         followQueue: false,
         execute: () => {
             return {
@@ -117,7 +117,33 @@ export function useCommander() {
         }
     })
 
+    /* 注册重做命令(重做命令不需要进入命令队列) */
+    useRegistry({
+        name: 'redo',
+        keyboard: ['ctrl+y','ctrl+shift+z'],
+        followQueue: false,
+        execute: () => {
+            return {
+                redo:() =>{
+                    const queueItem = state.queue[state.current+1]
+                    if(!!queueItem){
+                        queueItem.redo()
+                        state.current++
+                    }
+                }
+            }
+        }
+    })
+
+    useEffect(()=>{
+        return ()=>{
+            state.destroyList.forEach(fn=>!!fn && fn())
+        }
+    },[])
+
     return {
-        useRegistry
+        state,
+        useRegistry,
+        useInit
     }
 }

@@ -39,6 +39,12 @@ export function useVisualCommand(
                 }
             }
         },
-        followQueue: false
+        followQueue: true
     })
+
+    return {
+        delete: commander.state.commands.delete,
+        redo: commander.state.commands.redo,
+        undo: commander.state.commands.undo,
+    }
 }
