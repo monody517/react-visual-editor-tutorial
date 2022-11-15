@@ -1,5 +1,8 @@
 import {useCallback, useEffect, useRef, useState} from "react";
 import {KeyboardCode} from "./keyboard-code";
+import {ReactVisualEditorBlock} from "../ReactVisualEditor.utils";
+import {useCallbackRef} from "../hook/useCallbackRefs";
+import deepcopy from "deepcopy";
 
 export interface CommandExecute {
     undo?: () => void, // 调用当前命令队列将要执行的函数 (撤销)
@@ -8,7 +11,7 @@ export interface CommandExecute {
 
 interface Command {
     name: string,  // 命令的唯一表示
-    keyboard: string | string[],  // 命令快捷键
+    keyboard?: string | string[],  // 命令快捷键
     execute: (...args: any[]) => CommandExecute, // 命令执行后需要返回undo和redo执行的动作
     followQueue: boolean    // 命令执行完是否需要将命令执行得到的redo，undo存入命令队列(全选，撤销，重做这种命令是不需要进入命令队列的)
     init?: ()=>((()=>void) | undefined)     // 命令初始化函数
